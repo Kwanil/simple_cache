@@ -30,7 +30,7 @@ public class CacheManager {
      *
      * @return instance
      */
-    public static CacheManager getInstance() {
+    public static CacheManager cache() {
         return INSTANCE;
     }
 

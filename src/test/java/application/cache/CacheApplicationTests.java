@@ -33,7 +33,7 @@ public class CacheApplicationTests {
 		userRepository.save(new User("David", "Palmer"));
 		userRepository.save(new User("Michelle", "Dessler"));
 
-		CacheManager.getInstance().init(CACHE_KEY, CacheValue.of(userRepository::findAll));
+		CacheManager.cache().init(CACHE_KEY, CacheValue.of(userRepository::findAll));
 	}
 
 	@Test
@@ -45,7 +45,7 @@ public class CacheApplicationTests {
 
 	@Test
 	public void contextLoads_by_cache() {
-		CacheValue<List<User>> cacheValue = CacheManager.getInstance().get(CACHE_KEY);
+		CacheValue<List<User>> cacheValue = CacheManager.cache().get(CACHE_KEY);
 
 		List<User> users = cacheValue.cached();
 		List<User> findByLastName = users.stream().filter(u -> u.getLastName().equals("last")).collect(toList());

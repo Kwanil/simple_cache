@@ -14,7 +14,7 @@ import static org.junit.Assert.assertThat;
 public class CacheManagerTest {
     @Test
     public void init_and_get_and_clear_in_single_thread() {
-        CacheManager manager = CacheManager.getInstance();
+        CacheManager manager = CacheManager.cache();
         manager.init(()->"a", CacheValue.of(()-> Arrays.asList(1,2,3,4)));
         manager.init(()->"b", CacheValue.of(()-> Arrays.asList(5,6,7,8)));
         manager.reload(()->"c", CacheValue.of(()-> Arrays.asList(9,10,11)));
@@ -35,7 +35,7 @@ public class CacheManagerTest {
     @Test
     public void init_and_get_and_clear_in_multi_thread() {
         ExecutorService executor = Executors.newFixedThreadPool(8);
-        CacheManager cacheManager = CacheManager.getInstance();
+        CacheManager cacheManager = CacheManager.cache();
 
         try {
             executor.invokeAll(
@@ -53,10 +53,10 @@ public class CacheManagerTest {
         Object cachedA = cacheManager.get(() -> "a").cached();
         assertThat(cachedA, is(Arrays.asList(1,2,3,4)));
 
-        List cachedB = (List) CacheManager.getInstance().get(() -> "b").cached();
+        List cachedB = (List) CacheManager.cache().get(() -> "b").cached();
         assertThat(cachedB, is(Arrays.asList(5,6,7,8)));
 
-        List<Integer> cachedC = (List<Integer>) CacheManager.getInstance().get(() -> "c").cached();
+        List<Integer> cachedC = (List<Integer>) CacheManager.cache().get(() -> "c").cached();
         assertThat(cachedC, is(Arrays.asList(9,10,11)));
     }
 
