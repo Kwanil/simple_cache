@@ -1,8 +1,7 @@
 package application.cache;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Objects;
+import java.util.StringJoiner;
 
 /**
  * Represents a supplier of results.
@@ -21,11 +20,11 @@ public interface CacheKey {
 
     default CacheKey compose(CacheKey before) {
         Objects.requireNonNull(before);
-        return () -> StringUtils.join(before.name(), DELIMITER, this.name());
+        return () -> new StringJoiner(DELIMITER).add(before.name()).add(this.name()).toString();
     }
 
     default CacheKey andThen(CacheKey after) {
         Objects.requireNonNull(after);
-        return () -> StringUtils.join(this.name(), DELIMITER, after.name());
+        return () -> new StringJoiner(DELIMITER).add(this.name()).add(after.name()).toString();
     }
 }
