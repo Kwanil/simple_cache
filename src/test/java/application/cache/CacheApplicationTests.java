@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
+import static application.cache.CacheManager.cache;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,7 +34,7 @@ public class CacheApplicationTests {
 		userRepository.save(new User("David", "Palmer"));
 		userRepository.save(new User("Michelle", "Dessler"));
 
-		CacheManager.cache().init(CACHE_KEY, CacheValue.of(userRepository::findAll));
+		cache().init(CACHE_KEY, CacheValue.of(userRepository::findAll));
 	}
 
 	@Test
@@ -45,7 +46,7 @@ public class CacheApplicationTests {
 
 	@Test
 	public void contextLoads_by_cache() {
-		CacheValue<List<User>> cacheValue = CacheManager.cache().get(CACHE_KEY);
+		CacheValue<List<User>> cacheValue = cache().get(CACHE_KEY);
 
 		List<User> users = cacheValue.cached();
 		List<User> findByLastName = users.stream().filter(u -> u.getLastName().equals("last")).collect(toList());
