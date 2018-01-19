@@ -1,5 +1,7 @@
 package application.cache;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -70,13 +72,23 @@ public class CacheManager {
         return (CacheValue<T>) CACHE_MAP.get(requireNonNull(key).name());
     }
 
+
+    /**
+     * Get all the registered cache key names.
+     *
+     * @return registered all Cache key names
+     */
+    public Collection<String> getKeys() {
+        return Collections.unmodifiableCollection(CACHE_MAP.keySet());
+    }
+
     /**
      * Remove the corresponding data for the CacheKey.
      *
      * @param key registered Cache Key
      */
     public void clear(CacheKey key) {
-        CACHE_MAP.remove(requireNonNull(key));
+        CACHE_MAP.remove(requireNonNull(key).name());
     }
 
     /**
