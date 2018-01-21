@@ -48,7 +48,7 @@ public interface CacheKey {
      */
     default CacheKey compose(CacheKey before) {
         Objects.requireNonNull(before);
-        return () -> new StringJoiner(DELIMITER).add(before.name()).add(this.name()).toString();
+        return () -> new StringJoiner(DELIMITER).add(before.cacheKey()).add(this.cacheKey()).toString();
     }
 
 
@@ -65,6 +65,6 @@ public interface CacheKey {
      */
     default CacheKey andThen(CacheKey after) {
         Objects.requireNonNull(after);
-        return () -> new StringJoiner(DELIMITER).add(this.name()).add(after.name()).toString();
+        return () -> new StringJoiner(DELIMITER).add(this.cacheKey()).add(after.cacheKey()).toString();
     }
 }

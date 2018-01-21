@@ -32,11 +32,23 @@ public class CacheKeyTest {
     @Test
     public void enum_cache_key(){
         CacheKey actual = EnumCacheKey.ALPHA.andThen(ClassCacheKey.ID);
-        assertThat(actual.name(), is("ALPHA@ID"));
+        assertThat(actual.cacheKey(), is("alpha@ID"));
+    }
+
+    @Test
+    public void enum_cache_key_join() throws Exception {
+        CacheKey actual = CacheStatus.COMPANY.compose(EnumCacheKey.BETA);
+        assertThat(actual.cacheKey(), is("beta@COMPANY"));
     }
 
     enum EnumCacheKey implements CacheKey {
-        ALPHA, BETA
+        ALPHA, BETA;
+
+
+        @Override
+        public String cacheKey() {
+            return name().toLowerCase();
+        }
     }
 
     abstract static class ClassCacheKey implements CacheKey {
