@@ -69,7 +69,7 @@ public class CacheManager {
      * @return registered Cache Value
      */
     public <T> CacheValue<T> get(CacheKey key) {
-        return (CacheValue<T>) CACHE_MAP.get(requireNonNull(key).name());
+        return (CacheValue<T>) CACHE_MAP.get(requireNonNull(key).cacheKey());
     }
 
 
@@ -88,7 +88,7 @@ public class CacheManager {
      * @param key registered Cache Key
      */
     public void clear(CacheKey key) {
-        CACHE_MAP.remove(requireNonNull(key).name());
+        CACHE_MAP.remove(requireNonNull(key).cacheKey());
     }
 
     /**
@@ -101,6 +101,6 @@ public class CacheManager {
     private boolean putIfNotNull(CacheKey key, CacheValue<?> value){
         CacheKey cacheKey = requireNonNull(key);
         CacheValue<?> cacheValue = requireNonNull(value);
-        return CACHE_MAP.put(cacheKey.name(), cacheValue) == null;
+        return CACHE_MAP.put(cacheKey.cacheKey(), cacheValue) == null;
     }
 }
