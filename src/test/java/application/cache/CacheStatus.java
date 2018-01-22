@@ -10,7 +10,7 @@ package application.cache;
  *
  * @see CacheKey
  */
-public enum CacheStatus implements CacheKey {
+public enum CacheStatus implements EnumCacheKey {
     USER,
     LANGUAGE,
     CLASS,
@@ -19,7 +19,7 @@ public enum CacheStatus implements CacheKey {
     /**
      * Obtain all registered enum constant values.
      * all method is {@link Enum#valueOf(Class, String)}
-     * @return
+     * @return CacheStatus
      */
     public static CacheStatus[] all() {
         return CacheStatus.values();

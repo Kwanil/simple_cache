@@ -16,24 +16,12 @@ import java.util.StringJoiner;
 public interface CacheKey {
     String DELIMITER = "@";
 
-    /**
-     * Name used as a key by the CacheManager
-     * @return
-     */
-    String name();
 
     /**
-     * Name used as a key by the CacheManager.
-     * default name is {@link #name()}
-     * In the implements class allow the user to add one more processing name for the cache.
-     *
-     * @return Cache Key Name
-     *
-     * @see #name()
+     * Name used as a key by the CacheManager
+     * @return cache key
      */
-    default String cacheKey() {
-        return name();
-    }
+    String cacheKey();
 
     /**
      * Returns a composed CacheKey that first applies the {@code before}
