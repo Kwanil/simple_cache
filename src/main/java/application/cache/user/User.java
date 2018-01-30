@@ -19,4 +19,5 @@ public class User {
     private Long id;
     @NonNull private String firstName;
     @NonNull private String lastName;
+    @NonNull private int age;
 }

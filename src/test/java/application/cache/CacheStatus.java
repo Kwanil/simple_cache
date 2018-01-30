@@ -16,12 +16,4 @@ public enum CacheStatus implements EnumCacheKey {
     CLASS,
     COMPANY;
 
-    /**
-     * Obtain all registered enum constant values.
-     * all method is {@link Enum#valueOf(Class, String)}
-     * @return CacheStatus
-     */
-    public static CacheStatus[] all() {
-        return CacheStatus.values();
-    }
 }

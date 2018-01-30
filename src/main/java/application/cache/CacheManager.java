@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static java.util.Objects.requireNonNull;
 
 /**
- * This is cache manager of all purchase system.
+ * This is the cache manager.
  *
  * Class that manages the registration, management, removal and reloading of the cache.
  * The key that is registered as cache is the name of the {@link CacheKey},

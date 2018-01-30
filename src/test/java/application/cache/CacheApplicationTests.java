@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static application.cache.CacheManager.cache;
 import static java.util.stream.Collectors.toList;
@@ -20,21 +21,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @DataJpaTest
 public class CacheApplicationTests {
-	public static final CacheKey CACHE_KEY = () -> "user";
+	private static final CacheKey ADULT = () ->	"ADULT";
+
+	private static final CacheKey USER = CacheStatus.USER;
+	private static final CacheKey ADULT_USER = CacheStatus.USER.andThen(ADULT);
 
 	@Autowired
 	UserRepository userRepository;
 
 	@Before
 	public void before() {
-		userRepository.save(new User("first", "last"));
-		userRepository.save(new User("Jack", "Bauer"));
-		userRepository.save(new User("Chloe", "O'Brian"));
-		userRepository.save(new User("Kim", "Bauer"));
-		userRepository.save(new User("David", "Palmer"));
-		userRepository.save(new User("Michelle", "Dessler"));
+		userRepository.save(new User("first", "last", 17));
+		userRepository.save(new User("Jack", "Bauer", 18));
+		userRepository.save(new User("Chloe", "O'Brian", 21));
+		userRepository.save(new User("Kim", "Bauer",40));
+		userRepository.save(new User("David", "Palmer",10));
+		userRepository.save(new User("Michelle", "Dessler",32));
 
-		cache().init(CACHE_KEY, CacheValue.of(userRepository::findAll));
+		List<User> allUsers = userRepository.findAll();
+		Function<List<User>, List<User>> adultFunction = list -> list.stream().filter(u -> u.getAge() >19).collect(toList());
+
+		CacheValueSupplier<List<User>> userSupplier = () -> allUsers;
+		CacheValueSupplier<List<User>> adultUserSupplier = userSupplier.transform(adultFunction);
+
+		cache().init(USER, CacheValue.of(userSupplier));
+		cache().init(ADULT_USER, CacheValue.of(adultUserSupplier));
 	}
 
 	@Test
@@ -46,12 +57,22 @@ public class CacheApplicationTests {
 
 	@Test
 	public void contextLoads_by_cache() {
-		CacheValue<List<User>> cacheValue = cache().get(CACHE_KEY);
+		CacheValue<List<User>> cacheValue = cache().get(USER);
 
 		List<User> users = cacheValue.cached();
 		List<User> findByLastName = users.stream().filter(u -> u.getLastName().equals("last")).collect(toList());
 
 		assertThat(findByLastName).extracting(User::getLastName).containsOnly("last");
+	}
+
+	@Test
+	public void contextLoads_by_cache_adult() {
+		CacheValue<List<User>> cacheValue = cache().get(ADULT_USER);
+
+		List<User> users = cacheValue.cached();
+		List<User> findByLastName = users.stream().filter(u -> u.getLastName().equals("last")).collect(toList());
+
+		assertThat(findByLastName).extracting(User::getLastName).doesNotContain("last");
 	}
 
 }
