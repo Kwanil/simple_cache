@@ -50,3 +50,5 @@ Map<String, List<User>> userLastNameMap = CacheManager.cache().get(USER.andThen(
 
 ```
 
+test case는 spring boot, jpa로 구현하였다
+
